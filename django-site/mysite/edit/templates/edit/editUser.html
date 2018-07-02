@@ -1,0 +1,33 @@
+{% extends "main/wrapper.html" %}
+{% block content %}
+<div class="container-fluid">
+<p>
+	<h4 class="text-info">{{ users.0 }}</h4>
+</p>
+<p class="text-info">
+	<span class="my-text">Логин:</span> {{ users.1 }}
+</p>
+<p class="text-info">
+	<span class="my-text">Статус:</span>
+	{% if users.2 ==  "user" %}
+		пользователь
+	{% elif users.2 == "worker" %}
+		исполнитель
+	{% elif users.2 == "leader" %}
+		руководитель
+	{% elif users.2 == "manager" %}
+		менеджер проектов
+	{% endif %}
+</p>
+<p>
+	{% if users.3 == "active" %}
+		<a href="{% url 'edit:save_edit_user' %}?login={{login}}&status={{status}}&user_id={{users.4}}" class="btn btn-danger">Заблокировать</a>
+	{% else %}
+		<a href="{% url 'edit:save_edit_user' %}?login={{login}}&status={{status}}&user_id={{users.4}}" class="btn btn-success">Разблокировать</a>
+	{% endif %}
+</p>
+<p>
+	<a href="{% url 'main:profile' %}?login={{login}}&status={{status}}" class="btn btn-link">На главную</a>
+</p>
+</div>
+{% endblock %}

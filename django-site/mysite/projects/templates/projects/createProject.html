@@ -1,0 +1,262 @@
+{% extends "main/wrapper.html" %}
+{% block content %}
+<div class="container-fluid">
+<h3>Создать проект</h3>
+<form id="form" action="{% url 'projects:save_project' %}?login={{login}}&status={{status}}" accept-charset="UTF-8" method="post" autocomplete="off">
+	{% csrf_token %}
+	<p>
+		<label for="projectName">Название проекта:</label><br />
+		<input type="text" name="projectName" id="projectName" required />
+	</p>
+	<p>
+		<label for="projectStartDate">Дата начала проекта:</label><br />
+		<input type="date" name="projectStartDate" id="projectStartDate" required />
+	</p>
+	<p>
+		<label for="projectEndDate">Планируемая дата окончания проекта:</label><br />
+		<input type="date" name="projectEndDate" id="projectEndDate" required />
+	</p>
+	<p>
+		<label for="leaderLastName">Фамилия руководителя:</label><br />
+		<input type="text" name="leaderLastName" id="leaderLastName" required />
+	</p>
+	<p>
+		<label for="leaderFirstName">Имя руководителя:</label><br />
+		<input type="text" name="leaderFirstName" id="leaderFirstName" required />
+	</p>
+	<p>
+		<label for="leaderMiddleName">Отчество руководителя:</label><br />
+		<input type="text" name="leaderMiddleName" id="leaderMiddleName" required />
+	</p>
+	<p>
+		<label for="leaderBirthday">Дата рождения руководителя:</label><br />
+		<input type="date" name="leaderBirthday" id="leaderBirthday" required />
+	</p>
+	<h5>Добавить исполнителя:</h5>
+	<p>
+		<label for="workerLastName1">Фамилия исполнителя:</label><br />
+		<input type="text" name="workerLastName1" id="workerLastName1" required />
+	</p>
+	<p>
+		<label for="workerFirstName1">Имя исполнителя:</label><br />
+		<input type="text" name="workerFirstName1" id="workerFirstName1" required />
+	</p>
+	<p>
+		<label for="workerMiddleName1">Отчество исполнителя:</label><br />
+		<input type="text" name="workerMiddleName1" id="workerMiddleName1" required />
+	</p>
+	<p>
+		<label for="workerBirthday1">Дата рождения исполнителя:</label><br />
+		<input type="date" name="workerBirthday1" id="workerBirthday1" required />
+	</p>
+	<h5>Добавить этап:</h5>
+	<p>
+		<label for="phaseName1">Название этапа:</label><br />
+		<input type="text" name="phaseName1" id="phaseName1" required />
+	</p>
+	<p>
+		<label for="phaseStartDate1">Дата начала этапа:</label><br />
+		<input type="date" name="phaseStartDate1" id="phaseStartDate1" required />
+	</p>
+	<p>
+		<label for="phaseEndDate1">Дата окончания этапа:</label><br />
+		<input type="date" name="phaseEndDate1" id="phaseEndDate1" required />
+	</p>
+	<p>
+		<label for="phaseStatus1">Статус выполнения этапа:</label><br />
+		<select name="phaseStatus1" id="phaseStatus1">
+			<option>Не начат</option>
+			<option>Выполняется</option>
+			<option>Завершен</option>
+		</select>
+	</p>
+	<p>
+		<label for="phaseWorker1">Исполнитель этапа:</label><br />
+		<input type="text" name="phaseWorker1" id="phaseWorker1" required />
+	</p>
+	<p>
+		<label for="phaseDescription1">Описание этапа:</label><br />
+		<textarea rows="5" cols="40" name="phaseDescription1" id="phaseDescription1" required></textarea>
+	</p>
+	<p>
+		<input type="submit" id="saveButton" name="saveButton"  value="Сохранить" onclick="func()" class="btn btn-success" />
+	</p>
+</form>
+<p>
+	<button onclick="addWorker()" class="btn btn-primary">Добавить исполнителя</button>
+	<button onclick="addPhase()" class="btn btn-primary">Добавить этап</button>
+</p>
+<p>
+	<a href="{% url 'main:profile' %}?login={{login}}&status={{status}}" class="btn btn-link">Назад</a>
+</p>
+<script type="text/javascript">
+	saveButton = document.getElementById("saveButton")
+	workerNum = phaseNum = 2
+
+	if ("{{ message }}" != "") alert("{{ message }}");
+
+	function func() {
+		document.getElementById("form").setAttribute("action",
+			"{% url 'projects:save_project' %}?login={{login}}&status={{status}}&w=" + (workerNum - 1) + "&p=" + (phaseNum - 1))
+	}
+
+	document.getElementById("projectStartDate").addEventListener("change", function() {
+		var endDate = document.getElementById("projectEndDate").value
+
+		if (endDate != "") {
+			if (endDate <= this.value) {
+				alert("Ошибка: дата начала больше даты окончания")
+				this.value = ""
+			}
+		}
+	})
+
+	document.getElementById("projectEndDate").addEventListener("change", function() {
+		var startDate = document.getElementById("projectStartDate").value
+
+		if (startDate != "") {
+			if (startDate >= this.value) {
+				alert("Ошибка: дата начала больше даты окончания")
+				this.value = ""
+			}
+		}
+	})
+
+	document.getElementById("phaseStartDate1").addEventListener("change", function() {
+		var endDate = document.getElementById("phaseEndDate1").value
+
+		if (endDate != "") {
+			if (endDate <= this.value) {
+				alert("Ошибка: дата начала больше даты окончания")
+				this.value = ""
+			}
+		}
+	})
+
+	document.getElementById("phaseEndDate1").addEventListener("change", function() {
+		var startDate = document.getElementById("phaseStartDate1").value
+
+		if (startDate != "") {
+			if (startDate >= this.value) {
+				alert("Ошибка: дата начала больше даты окончания")
+				this.value = ""
+			}
+		}
+	})
+
+	function addWorker() {
+		addHeader(saveButton, "Добавить исполнителя:")
+		addElement("text", "workerLastName" + workerNum, "Фамилия исполнителя:", saveButton)
+		addElement("text", "workerFirstName" + workerNum, "Имя исполнителя:", saveButton)
+		addElement("text", "workerMiddleName" + workerNum, "Отчество исполнителя:", saveButton)
+		addElement("date", "workerBirthday" + workerNum, "Дата рождения исполнителя:", saveButton)
+		saveButton.parentNode.insertBefore(document.createElement("p"), saveButton)
+		workerNum++
+	}
+
+	function addPhase() {
+		addHeader(saveButton, "Добавить этап:")
+		addElement("text", "phaseName" + phaseNum, "Название этапа:", saveButton)
+		addElement("date", "phaseStartDate" + phaseNum, "Дата начала этапа:", saveButton)
+		addElement("date", "phaseEndDate" + phaseNum, "Дата окончания этапа:", saveButton)
+		addSelect(saveButton)
+		addElement("text", "phaseWorker" + phaseNum, "Исполнитель этапа:", saveButton)
+		addTextarea(saveButton)
+		saveButton.parentNode.insertBefore(document.createElement("p"), saveButton)
+		phaseNum++
+
+		document.getElementById("phaseStartDate" + (phaseNum - 1)).addEventListener("change", function() {
+			var endDate = document.getElementById("phaseEndDate" + (phaseNum - 1)).value
+
+			if (endDate != "") {
+				if (endDate <= this.value) {
+					alert("Ошибка: дата начала больше даты окончания")
+					this.value = ""
+				}
+			}
+		})
+
+		document.getElementById("phaseEndDate" + (phaseNum - 1)).addEventListener("change", function() {
+			var startDate = document.getElementById("phaseStartDate" + (phaseNum - 1)).value
+
+			if (startDate != "") {
+				if (startDate >= this.value) {
+					alert("Ошибка: дата начала больше даты окончания")
+					this.value = ""
+				}
+			}
+		})
+
+	}
+
+	function addElement(type, name, label, button) {
+		button.parentNode.insertBefore(document.createElement("p"), button)
+		button.parentNode.insertBefore(createLabel(name, label), button)
+		button.parentNode.insertBefore(document.createElement("br"), button)
+		button.parentNode.insertBefore(createInput(type, name), button)
+	}
+
+	function createInput(type, name) {
+		var input = document.createElement("input")
+
+		input.setAttribute("type", type)
+		input.setAttribute("name", name)
+		input.setAttribute("id", name)
+		input.setAttribute("required", "")
+
+		return input
+	}
+
+	function addHeader(button, text) {
+		var header = document.createElement("h5")
+
+		header.innerHTML = text
+		button.parentNode.insertBefore(header, button)
+	}
+
+	function addTextarea(button) {
+		var textarea = document.createElement("textarea")
+
+		button.parentNode.insertBefore(document.createElement("p"), button)
+		button.parentNode.insertBefore(createLabel("phaseDescription" + phaseNum, "Описание этапа:"), button)
+		button.parentNode.insertBefore(document.createElement("br"), button)
+		textarea.setAttribute("rows", 5)
+		textarea.setAttribute("cols", 40)
+		textarea.setAttribute("name", "phaseDescription" + phaseNum)
+		textarea.setAttribute("id", "phaseDescription" + phaseNum)
+		textarea.setAttribute("required", "")
+		button.parentNode.insertBefore(textarea, button)
+	}
+
+	function addSelect(button) {
+		var select = document.createElement("select")
+		var option1 = document.createElement("option")
+		var option2 = document.createElement("option")
+		var option3 = document.createElement("option")
+
+		option1.innerHTML = "Не начат"
+		option2.innerHTML = "Выполняется"
+		option3.innerHTML = "Завершен"
+		button.parentNode.insertBefore(document.createElement("p"), button)
+		button.parentNode.insertBefore(createLabel("phaseStatus" + phaseNum, "Статус выполнения этапа:"), button)
+		button.parentNode.insertBefore(document.createElement("br"), button)
+		select.setAttribute("name", "phaseStatus" + phaseNum)
+		select.setAttribute("id", "phaseStatus" + phaseNum)
+		select.appendChild(option1)
+		select.appendChild(option2)
+		select.appendChild(option3)
+		button.parentNode.insertBefore(select, button)
+	}
+
+	function createLabel(textFor, innerHTML) {
+		var label = document.createElement("label")
+
+		label.setAttribute("for", textFor)
+		label.innerHTML = innerHTML
+
+		return label
+	}
+
+</script>
+</div>
+{% endblock %}

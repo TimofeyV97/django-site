@@ -1,0 +1,52 @@
+{% extends "main/wrapperHomePage.html" %}
+{% block content %}
+<script type="text/javascript">
+
+	if ("{{ message }}" != "") alert("{{ message }}")
+
+</script>
+<h3>Регистрация</h3>
+<form action="{% url 'registration:register' %}" accept-charset="UTF-8" method="post" autocomplete="off">
+	{% csrf_token %}
+	<p>
+		<label for="lastName">Фамилия:</label><br />
+		<input type="text" name="lastName" id="lastName" required />
+	</p>
+	<p>
+		<label for="firstName">Имя:</label><br />
+		<input type="text" name="firstName" id="firstName" required />
+	</p>
+	<p>
+		<label for="middleName">Отчество:</label><br />
+		<input type="text" name="middleName" id="middleName" required />
+	</p>
+	<p>
+		<label for="login">Логин:</label><br />
+		<input type="text" name="login" id="login" required />
+	</p>
+	<p>
+		<label for="password1">Пароль:</label><br />
+		<input type="password" name="password1" id="password1" required />
+	</p>
+	<p>
+		<label for="password2">Повторите пароль:</label><br />
+		<input type="password" name="password2" id="password2" required />
+	</p>
+	<p>
+		<input type="radio" name="status" id="user" value="user" required />
+		<label for="user">Пользователь</label><br />
+		<input type="radio" name="status" id="worker" value="worker" />
+		<label for="worker">Исполнитель</label><br />
+		<input type="radio" name="status" id="leader" value="leader" />
+		<label for="leader">Руководитель</label><br />
+		<input type="radio" name="status" id="manager" value="manager" />
+		<label for="manager">Менеджер проектов</label>
+	</p>
+	<p>
+		<button type="submit" class="btn btn-success">Зарегистрироваться</button>
+	</p>
+</form>
+<p>
+	<a href="{% url 'main:index' %}" class="btn btn-link">На главную</a>
+</p>
+{% endblock %}

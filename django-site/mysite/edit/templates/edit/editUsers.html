@@ -1,0 +1,29 @@
+{% extends "main/wrapper.html" %}
+{% block content %}
+<div class="container-fluid">
+	<h3>Список пользователей:</h3>
+<ul>
+	{% for el in users %}
+		{% if el.1 != 'admin' %}
+			<li>
+				<a href="{% url 'edit:edit_user' %}?login={{login}}&status={{status}}&user_id={{el.2}}">
+					{{ el.0 }},
+					{% if el.1 == "user" %}
+						пользователь
+					{% elif el.1 == "worker" %}
+						исполнитель
+					{% elif el.1 == "leader" %}
+						руководитель
+					{% elif el.1 == "manager" %}
+						менеджер проектов
+					{% endif %}
+				</a>
+			</li>
+		{% endif %}
+	{% endfor %}
+</ul>
+<p>
+	<a href="{% url 'main:profile' %}?login={{login}}&status={{status}}" class="btn btn-link">Назад</a>
+</p>
+</div>
+{% endblock %}

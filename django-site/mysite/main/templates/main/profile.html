@@ -1,0 +1,41 @@
+{% extends "main/wrapper.html" %}
+{% block content %}
+<div class="container-fluid">
+<h1>Личный кабинет</h1>
+<p>
+	<h4 class="text-info">{{ last_name }} {{ first_name }} {{ middle_name }}</h4>
+</p>
+<p class="text-info">
+	<span class="my-text">Логин:</span> {{ login }}
+</p>
+<p class="text-info">
+	<span class="my-text">Статус:</span>
+	{% if status ==  "user" %}
+		пользователь
+	{% elif status == "worker" %}
+		исполнитель
+	{% elif status == "leader" %}
+		руководитель
+	{% elif status == "manager" %}
+		менеджер проектов
+	{% elif status == "admin" %}
+		администратор
+	{% endif %}
+</p>
+
+<a href="{% url 'projects:index' %}?login={{login}}&status={{status}}" class="btn btn-primary">Список проектов</a>
+{% if status == "worker" %}
+	<a href="{% url 'edit:edit_phases' %}?login={{login}}&status={{status}}" class="btn btn-primary">Мои этапы</a>
+{% endif %}
+{% if status == "leader" %}
+	<a href="{% url 'edit:edit_projects' %}?login={{login}}&status={{status}}" class="btn btn-primary">Мои проекты</a>
+{% endif %}
+{% if status == "manager" %}
+	<a href="{% url 'edit:edit_projects_manager' %}?login={{login}}&status={{status}}" class="btn btn-primary">Мои проекты</a>	
+	<a href="{% url 'projects:create_project' %}?login={{login}}&status={{status}}" class="btn btn-primary">Создать проект</a>
+{% endif %}
+{% if status == "admin" %}
+	<a href="{% url 'edit:edit_users' %}?login={{login}}&status={{status}}" class="btn btn-primary">Список пользователей</a>
+{% endif %}
+</div>
+{% endblock %}

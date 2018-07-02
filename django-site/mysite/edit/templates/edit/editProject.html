@@ -1,0 +1,51 @@
+{% extends "main/wrapper.html" %}
+{% block content %}
+<div class="container-fluid">
+	<form id="form" action="{% url 'edit:save_edit_project' %}?login={{login}}&status={{status}}&project_id={{project_id}}" accept-charset="UTF-8" method="post" autocomplete="off">
+		{% csrf_token %}
+		<p>
+			<label for="projectName">Название проекта:</label><br />
+			<input type="text" name="projectName" id="projectName" value="{{projects.0}}" required />
+		</p>
+		<p>
+			<label for="projectStartDate">Дата начала проекта:</label><br />
+			<input type="date" name="projectStartDate" id="projectStartDate" value="{{projects.1}}" required />
+		</p>
+		<p>
+			<label for="projectEndDate">Планируемая дата окончания проекта:</label><br />
+			<input type="date" name="projectEndDate" id="projectEndDate" value="{{projects.2}}" required />
+		</p>
+		<p>
+			<button type="submit" class="btn btn-success">Сохранить</button>
+		</p>
+	</form>
+<p>
+	<a href="{% url 'main:profile' %}?login={{login}}&status={{status}}" class="btn btn-link">На главную</a>
+</p>
+</div>
+<script type="text/javascript">
+
+	document.getElementById("projectStartDate").addEventListener("change", function() {
+		var endDate = document.getElementById("projectEndDate").value
+
+		if (endDate != "") {
+			if (endDate <= this.value) {
+				alert("Ошибка: дата начала больше даты окончания")
+				this.value = ""
+			}
+		}
+	})
+
+	document.getElementById("projectEndDate").addEventListener("change", function() {
+		var startDate = document.getElementById("projectStartDate").value
+
+		if (startDate != "") {
+			if (startDate >= this.value) {
+				alert("Ошибка: дата начала больше даты окончания")
+				this.value = ""
+			}
+		}
+	})
+
+</script>
+{% endblock %}

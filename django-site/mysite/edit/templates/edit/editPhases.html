@@ -1,0 +1,25 @@
+{% extends "main/wrapper.html" %}
+{% block content %}
+<script type="text/javascript">
+
+	if ("{{ message }}" != "") alert("{{ message }}")
+
+</script>
+<div class="container-fluid">
+{% for list in phases %}
+	{% for el in list %}	
+		{% if el == list.0 %}
+			<h3>{{ el }}</h3>
+		{% elif el != list.7 %}
+			{{ el }}<br />
+		{% endif %}
+	{% endfor %}
+	<br />
+	<a href="{% url 'edit:edit_phase' %}?login={{login}}&status={{status}}&phase_id={{list.7}}" class="btn btn-primary">Редактировать</a>
+	<hr />
+{% endfor %}
+<p>
+	<a href="{% url 'main:profile' %}?login={{login}}&status={{status}}" class="btn btn-link">Назад</a>
+</p>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "main/wrapper.html" %}
+{% block content %}
+
+<script type="text/javascript">
+
+function view(n) {
+	style = document.getElementById(n).style;
+	style.display = (style.display == 'block') ? 'none' : 'block';
+}
+
+</script>
+
+{% for list in projects_info %}
+	<h3>{{ list.0 }}</h3><br />
+	<p>
+
+		<script type="text/javascript">
+
+			var x = "{{ list.1 }}";
+			span = document.createElement("span");
+			span.setAttribute("class", "tt");
+			span.setAttribute("onclick", "view('" + x + "'); return false");
+			span.innerHTML = "Подробнее";
+			document.body.appendChild(span);
+			
+		</script>
+
+	</p>
+	<p>
+		<span id={{ list.1 }} class="terms">
+			{% for el in list %}
+				{% if el == 'Исполнители:' %}
+					<script type="text/javascript">
+
+					var x = "{{ list.1 }}{{ list.1 }}";
+					var parent = document.getElementById("{{ list.1 }}");
+					span = document.createElement("span");
+					span.setAttribute("class", "tt");
+					span.setAttribute("onclick", "view('" + x + "'); return false");
+					span.innerHTML = "{{ el }}";
+					parent.appendChild(span);
+
+					</script>
+					<br />
+					<span id={{ list.1 }}{{ list.1 }} class="terms">
+					{% for workers_list in workers_info %}
+						{% if workers_list.0 == list.1 %}
+							{% for el in workers_list %}
+								{% if el != list.1 %}
+									{{ el }} <br />
+								{% endif %}
+							{% endfor %}
+							<br />
+						{% endif %}
+					{% endfor %}
+					</span>
+
+					{% elif el == 'Этапы:' %}
+						<script type="text/javascript">
+
+						var x = "{{ list.1 }}{{ list.1 }}{{ list.1 }}";
+						var parent = document.getElementById("{{ list.1 }}");
+						span = document.createElement("span");
+						span.setAttribute("class", "tt");
+						span.setAttribute("onclick", "view('" + x + "'); return false");
+						span.innerHTML = "{{ el }}";
+						parent.appendChild(span);
+
+						</script>
+						<br />
+						<span id={{ list.1 }}{{ list.1 }}{{ list.1 }} class="terms">
+						{% for phases_list in phases_info %}
+							{% if phases_list.0 == list.1 %}
+								{% for el in phases_list %}
+									{% if el != list.1 %}
+										{{ el }} <br />
+									{% endif %}
+								{% endfor %}
+							<br />
+							{% endif %}
+						{% endfor %}
+						</span>
+
+					{% elif el != list.0 and el != list.1 %}
+						{{ el }} <br />
+
+					{% endif %}
+
+			{% endfor %}
+		</span>
+	</p>
+	<hr />
+{% endfor %}
+
+<p>
+	<a href="{% url 'main:profile' %}?login={{login}}&status={{status}}" class="btn btn-link">Назад</a>
+</p>
+{% endblock %}

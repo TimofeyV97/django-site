@@ -1,0 +1,40 @@
+{% extends "main/wrapper.html" %}
+{% block content %}
+<div class="container-fluid">
+	{% for el in phases %}
+		{% if el == phases.6 %}
+			<form id="form" action="{% url 'edit:save_edit_phase' %}?login={{login}}&status={{status}}&phase_id={{phase_id}}" accept-charset="UTF-8" method="post" autocomplete="off">
+				{% csrf_token %}
+				<p>
+					<label for="phaseStatus">Статус выполнения этапа:</label><br />
+					<select name="phaseStatus" id="phaseStatus">
+					{% if phases.6 == "Выполняется" %}
+						<option>Выполняется</option>
+						<option>Не начат</option>
+						<option>Завершен</option>
+					{% elif phases.6 == "Не начат" %}
+						<option>Не начат</option>
+						<option>Выполняется</option>
+						<option>Завершен</option>
+					{% elif phases.6 == "Завершен" %}
+						<option>Завершен</option>
+						<option>Выполняется</option>
+						<option>Не начат</option>
+					{% endif %}
+					</select>
+				</p>
+				<p>
+					<button type="submit" class="btn btn-success">Сохранить</button>
+				</p>
+			</form>
+		{% elif el == phases.0 %}
+			<h3>{{ el }}</h3>
+		{% else %}
+			{{ el }}<br />
+		{% endif %}
+	{% endfor %}
+<p>
+	<a href="{% url 'main:profile' %}?login={{login}}&status={{status}}" class="btn btn-link">На главную</a>
+</p>
+</div>
+{% endblock %}

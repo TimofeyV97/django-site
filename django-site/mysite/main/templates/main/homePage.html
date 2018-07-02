@@ -1,0 +1,25 @@
+{% extends "main/wrapperHomePage.html" %}
+{% block content %}
+<script type="text/javascript">
+
+	if ("{{ message }}" != "") alert("{{ message }}")
+	
+</script>
+<form action="{% url 'main:profile' %}" accept-charset="UTF-8" method="post" autocomplete="off">
+	{% csrf_token %}
+	<p>
+		<label for="login">Логин:</label><br />
+		<input type="text" name="login" id="login" required />
+	</p>
+	<p>
+		<label for="password">Пароль:</label><br />
+		<input type="password" name="password" id="password" required />
+	</p>
+	<p>
+		<button type="submit" class="btn btn-success">Войти</button>
+	</p>
+</form>
+<p>
+	<a href="{% url 'registration:index' %}" class="btn btn-link">Регистрация</a>
+</p>
+{% endblock %}
